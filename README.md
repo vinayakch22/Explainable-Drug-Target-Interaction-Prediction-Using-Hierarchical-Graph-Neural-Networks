@@ -11,13 +11,17 @@ A graph neural network model for predicting drug-target interactions (DTI) using
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
-2. [Project Structure](#project-structure)
-3. [Environment Setup](#environment-setup)
-4. [Dataset Download](#dataset-download)
-5. [Path Configuration](#path-configuration)
-6. [Running the Project](#running-the-project)
-7. [File-by-File Description](#file-by-file-description)
-8. [Troubleshooting](#troubleshooting)
+2. [Benchmark Performance Results](#benchmark-performance-results)
+3. [Pretrained Models & Validation Results](#pretrained-models--validation-results)
+4. [Project Structure](#project-structure)
+5. [Environment Setup](#environment-setup)
+6. [Dataset Download](#dataset-download)
+7. [Path Configuration](#path-configuration)
+8. [Running the Project](#running-the-project)
+9. [Explainability Framework](#explainability-framework)
+10. [Validation Pipelines](#validation-pipelines)
+11. [File-by-File Description](#file-by-file-description)
+12. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -30,6 +34,46 @@ Drugs are encoded as molecular graphs (atoms as nodes, bonds as edges) using Gra
 
 **Stage 2 — Interaction Prediction (`model.py`):**
 The node feature matrix is fed into H2GNN, which uses a dynamic-gated fusion of an AE (capturing chemical structure) and an IGAE (capturing network topology), followed by GAT refinement and graph propagation, to reconstruct the drug-protein adjacency matrix and predict interactions.
+
+---
+
+## Benchmark Performance Results
+
+Comprehensive performance metrics across the Davis and KIBA benchmark datasets under three splitting settings:
+* **Setting 1 (New-Drug):** Evaluates generalization on unseen drug compounds.
+* **Setting 2 (New-Target):** Evaluates generalization on novel target proteins.
+* **Setting 3 (De Novo):** Evaluates dual out-of-sample prediction (unseen drugs and unseen targets).
+
+| Dataset & Setting | AUC | AUPR | F1-Score | Accuracy |
+| :--- | :---: | :---: | :---: | :---: |
+| **Davis (Setting 1 - New Drug)** | **0.8815** | **0.8857** | 0.8020 | **0.8010** |
+| **Davis (Setting 2 - New Target)** | 0.8604 | 0.8767 | 0.7849 | 0.7751 |
+| **Davis (Setting 3 - De Novo)** | 0.8704 | 0.8833 | **0.8057** | 0.7792 |
+| **KIBA (Setting 1 - New Drug)** | 0.7812 | 0.7542 | 0.7238 | **0.6880** |
+| **KIBA (Setting 2 - New Target)** | 0.7815 | 0.7706 | 0.7265 | 0.6729 |
+| **KIBA (Setting 3 - De Novo)** | **0.8062** | **0.8038** | **0.7619** | 0.6842 |
+
+---
+
+## Pretrained Models & Validation Results
+
+Due to GitHub repository size limits (checkpoints > 100 MB), trained model checkpoints and the complete explainability validation suite are hosted on Google Drive:
+
+> **Google Drive Repository:** [Download Pretrained Models & Validation Results](https://drive.google.com/drive/folders/1tNB6_fsjD18fTvII9PcS1pjES2hKwDKh?usp=sharing)
+
+The Drive repository includes:
+* **`Validation_Results.zip`** (`results/` & `prof/`): All 7 validation test suites (attention calibration, branch consistency, decoder convergence, edge sanity, perturbation tests, pharmacophore alignment, and stability reports).
+* **`Checkpoints_kiba.zip`** (`checkpoints/`): Pretrained model weights (`gnnnet_kiba.pt`, `h2gnn_kiba.pt`) and preprocessed graph tensors (`data_kiba.pt`).
+
+### Using Downloaded Assets
+To use the checkpoints for inference or validation without retraining:
+```bash
+# Extract checkpoints into checkpoints/ directory
+unzip Checkpoints_kiba.zip -d checkpoints/
+
+# Extract validation results into results/ directory
+unzip Validation_Results.zip -d results/
+```
 
 ---
 
@@ -275,7 +319,7 @@ All hyperparameters are defined in `opt.py`. Key ones to know:
 
 | Argument | Default | Description |
 |----------|---------|-------------|
-| `--epochs` | 250 | Number of training epochs |
+| `--epochs` | 200 | Number of training epochs |
 | `--lr` | 1e-4 | Learning rate |
 | `--n_z` | 20 | Latent embedding dimension |
 | `--n_input` | 160 | Input feature dimension (must match GNNNet output) |
