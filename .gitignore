@@ -3,7 +3,7 @@ dataset/
 
 # Ignore the large Google Drive dataset directory and ZIP file
 data/
-data.zip
+*.zip
 
 # Ignore model and data checkpoints
 checkpoints/
