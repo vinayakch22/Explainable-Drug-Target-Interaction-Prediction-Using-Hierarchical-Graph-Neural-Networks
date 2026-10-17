@@ -35,7 +35,6 @@ def normalize_features(mx):
 """Load preprocessed data."""
 # DATASET = "davis"
 DATASET = "kiba"
-# DATASET = "DrugBank"
 
 data_new, nb_drugs, nb_proteins = dataload(DATASET)
 nb_all = nb_drugs+nb_proteins
@@ -115,7 +114,7 @@ def test():
     return AUC, AUPR, F1, ACC
 
 #------main
-final_AUC = 0;final_AUPR = 0;final_F1 = 0;final_ACC = 0
+best_epoch = 0; final_AUC = 0; final_AUPR = 0; final_F1 = 0; final_ACC = 0
 for epoch in range(args.epochs):
     if epoch % 10 == 0:
         print('\nepoch: ' + str(epoch))

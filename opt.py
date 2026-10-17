@@ -11,7 +11,7 @@ parser.add_argument('--gamma_value', type=float, default=1e3)
 parser.add_argument('--lr', type=float, default=1e-4)
 parser.add_argument('--n_z', type=int, default=20)
 parser.add_argument('--n_input', type=int, default=160)
-parser.add_argument('--epochs', type=int, default=250)
+parser.add_argument('--epochs', type=int, default=200)
 parser.add_argument('--show_training_details', type=bool, default=False)
 parser.add_argument('--norm', type=str, default='false',
                         help='normalization')

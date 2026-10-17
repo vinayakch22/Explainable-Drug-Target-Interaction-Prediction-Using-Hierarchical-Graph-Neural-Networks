@@ -31,3 +31,7 @@ venv/
 env/
 .venv/
 .conda/
+
+# Professor review folder and collection script
+prof/
+collect_for_prof.py
